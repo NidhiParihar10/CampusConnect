@@ -1,0 +1,39 @@
+
+# Compiled Java files
+*.class
+
+# Local SQLite database
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Downloaded dependencies
+*.jar
+
+# VS Code local settings
+.vscode/
+
+# Java build folders
+target/
+build/
+bin/
+out/
+
+# Environment and secrets
+.env
+.env.*
+*.key
+*.pem
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+# Windows system files
+desktop.ini
+
+# Accidentally created local note
+Connect Java application*
