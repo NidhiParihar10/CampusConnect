@@ -6,6 +6,9 @@ import './App.css'
 function App() {
   const [roll, setRoll] = useState('')
   const [password, setPassword] = useState('')
+  const [name, setName] = useState('')
+  const [course, setCourse] = useState('')
+  const [mode, setMode] = useState('login')
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const [loggedInRoll, setLoggedInRoll] = useState(null)
@@ -33,6 +36,19 @@ function App() {
     checkSession()
   }, [])
 
+  // Get CSRF token for secure POST requests
+  const getCsrfToken = async () => {
+    const response = await fetch('/api/auth/csrf', {
+      credentials: 'same-origin',
+    })
+
+    if (!response.ok) {
+      throw new Error('Unable to get security token')
+    }
+
+    return response.json()
+  }
+
   // Student login
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -40,15 +56,7 @@ function App() {
     setLoading(true)
 
     try {
-      const csrfResponse = await fetch('/api/auth/csrf', {
-        credentials: 'same-origin',
-      })
-
-      if (!csrfResponse.ok) {
-        throw new Error('Unable to get CSRF token')
-      }
-
-      const csrf = await csrfResponse.json()
+      const csrf = await getCsrfToken()
 
       const response = await fetch('/api/auth/login', {
         method: 'POST',
@@ -73,9 +81,52 @@ function App() {
       setLoggedInRoll(result.roll)
       setPassword('')
       setMessage('')
-
     } catch (error) {
       console.error('Login error:', error)
+      setMessage('Unable to connect to the server')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Register a new student
+  const handleRegister = async (e) => {
+    e.preventDefault()
+    setMessage('')
+    setLoading(true)
+
+    try {
+      const csrf = await getCsrfToken()
+
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          [csrf.headerName]: csrf.token,
+        },
+        body: JSON.stringify({
+          name: name.trim(),
+          course: course.trim(),
+          roll: roll.trim(),
+          password,
+        }),
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        setMessage(result.error || 'Registration failed')
+        return
+      }
+
+      setMode('login')
+      setName('')
+      setCourse('')
+      setPassword('')
+      setMessage('Registration successful! Please log in.')
+    } catch (error) {
+      console.error('Registration error:', error)
       setMessage('Unable to connect to the server')
     } finally {
       setLoading(false)
@@ -85,15 +136,7 @@ function App() {
   // Student logout
   const handleLogout = async () => {
     try {
-      const csrfResponse = await fetch('/api/auth/csrf', {
-        credentials: 'same-origin',
-      })
-
-      if (!csrfResponse.ok) {
-        throw new Error('Failed to get CSRF token')
-      }
-
-      const csrf = await csrfResponse.json()
+      const csrf = await getCsrfToken()
 
       const response = await fetch('/api/auth/logout', {
         method: 'POST',
@@ -111,14 +154,12 @@ function App() {
       setRoll('')
       setPassword('')
       setMessage('Logged out successfully!')
-
     } catch (error) {
       console.error('Logout failed:', error)
       alert('Logout failed. Please try again.')
     }
   }
 
-  // Show loading screen while checking session
   if (checkingSession) {
     return (
       <div className="login-page">
@@ -129,7 +170,6 @@ function App() {
     )
   }
 
-  // Show Dashboard if student is logged in
   if (loggedInRoll) {
     return (
       <Dashboard
@@ -139,7 +179,6 @@ function App() {
     )
   }
 
-  // Otherwise show Login Page
   return (
     <div className="login-page">
       <div className="login-card">
@@ -152,13 +191,67 @@ function App() {
           Connect. Collaborate. Learn Together.
         </p>
 
-        <h2>Welcome Back!</h2>
+        <div className="mode-switch">
+          <button
+            type="button"
+            className={mode === 'login' ? 'mode-button active' : 'mode-button'}
+            onClick={() => {
+              setMode('login')
+              setMessage('')
+            }}
+          >
+            Login
+          </button>
+
+          <button
+            type="button"
+            className={mode === 'register' ? 'mode-button active' : 'mode-button'}
+            onClick={() => {
+              setMode('register')
+              setMessage('')
+            }}
+          >
+            Register
+          </button>
+        </div>
+
+        <h2>
+          {mode === 'login' ? 'Welcome Back!' : 'Create Account'}
+        </h2>
 
         <p className="login-text">
-          Login to your student account
+          {mode === 'login'
+            ? 'Login to your student account'
+            : 'Register for your student account'}
         </p>
 
-        <form onSubmit={handleLogin}>
+        <form onSubmit={mode === 'login' ? handleLogin : handleRegister}>
+
+          {mode === 'register' && (
+            <>
+              <label htmlFor="name">Full Name</label>
+              <input
+                id="name"
+                type="text"
+                placeholder="Enter your full name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                maxLength={100}
+                required
+              />
+
+              <label htmlFor="course">Course</label>
+              <input
+                id="course"
+                type="text"
+                placeholder="e.g. MCA"
+                value={course}
+                onChange={(e) => setCourse(e.target.value)}
+                maxLength={100}
+                required
+              />
+            </>
+          )}
 
           <label htmlFor="roll">Roll Number</label>
           <input
@@ -167,6 +260,7 @@ function App() {
             placeholder="Enter your roll number"
             value={roll}
             onChange={(e) => setRoll(e.target.value)}
+            maxLength={50}
             required
           />
 
@@ -174,14 +268,23 @@ function App() {
           <input
             id="password"
             type="password"
-            placeholder="Enter your password"
+            placeholder={
+              mode === 'register'
+                ? 'At least 8 characters'
+                : 'Enter your password'
+            }
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            minLength={mode === 'register' ? 8 : undefined}
             required
           />
 
           <button type="submit" disabled={loading}>
-            {loading ? 'Logging in...' : 'Login'}
+            {loading
+              ? 'Please wait...'
+              : mode === 'login'
+                ? 'Login'
+                : 'Create Account'}
           </button>
 
         </form>

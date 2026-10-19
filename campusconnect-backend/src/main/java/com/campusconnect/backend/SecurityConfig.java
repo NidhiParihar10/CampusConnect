@@ -17,25 +17,27 @@ public class SecurityConfig {
                 http
                                 .authorizeHttpRequests(auth -> auth
 
-                                                // Public APIs for local development
+                                                // Public GET APIs
                                                 .requestMatchers(
                                                                 HttpMethod.GET,
                                                                 "/api/hello",
                                                                 "/api/students",
                                                                 "/api/requests",
-                                                                "/api/auth/csrf")
+                                                                "/api/auth/csrf",
+                                                                "/api/auth/me")
                                                 .permitAll()
 
-                                                // Allow login requests
+                                                // Allow login and registration requests
                                                 .requestMatchers(
                                                                 HttpMethod.POST,
-                                                                "/api/auth/login")
+                                                                "/api/auth/login",
+                                                                "/api/auth/register")
                                                 .permitAll()
 
-                                                // Other endpoints require authentication
+                                                // All other endpoints require authentication
                                                 .anyRequest().authenticated())
 
-                                // We will implement our own JSON login endpoint
+                                // Use our own JSON login endpoint
                                 .formLogin(form -> form.disable())
 
                                 // Disable HTTP Basic login
