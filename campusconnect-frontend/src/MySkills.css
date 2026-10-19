@@ -1,0 +1,62 @@
+
+.my-skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.skill-tag {
+  background: #e0e7ff;
+  color: #3730a3;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.my-skills-form {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.my-skills-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.my-skills-form button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.my-skills-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.skills-error {
+  color: #dc2626;
+  margin-top: 10px;
+}
+
+.skills-success {
+  color: #15803d;
+  margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+  .my-skills-form {
+    flex-direction: column;
+  }
+}
