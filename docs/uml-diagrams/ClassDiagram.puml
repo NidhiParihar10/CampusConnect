@@ -1,0 +1,67 @@
+﻿@startuml
+class Student {
+  roll
+  name
+  course
+  password
+}
+
+class StudentSkill {
+  roll
+  skill
+}
+
+class HelpRequest {
+  requestId
+  roll
+  topic
+  description
+  status
+  assignedHelper
+}
+
+class AuthController {
+  register()
+  login()
+  logout()
+}
+
+class AuthService {
+  registerStudent()
+  verifyLogin()
+}
+
+class StudentSkillController {
+  getMySkills()
+  addMySkill()
+}
+
+class HelpRequestController {
+  getRequests()
+  createRequest()
+  acceptRequest()
+  startRequest()
+  resolveRequest()
+}
+
+class MatchingHelperController {
+  findMatchingHelpers()
+  containsSkill()
+}
+
+class LeaderboardController {
+  getLeaderboard()
+}
+
+Student "1" -- "0..*" StudentSkill : owns
+Student "1" -- "0..*" HelpRequest : creates
+Student "0..1" -- "0..*" HelpRequest : assigned helper
+
+AuthController --> AuthService
+StudentSkillController --> StudentSkill
+HelpRequestController --> HelpRequest
+MatchingHelperController --> StudentSkill
+MatchingHelperController --> HelpRequest
+LeaderboardController --> Student
+LeaderboardController --> HelpRequest
+@enduml

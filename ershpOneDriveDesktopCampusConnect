@@ -1,0 +1,14 @@
+campusconnect-backend/pom.xml:32: trailing whitespace.
+[32m+[m[41m	[m
+campusconnect-backend/pom.xml:74: trailing whitespace.
+[32m+[m[41m	[m
+campusconnect-backend/src/main/java/com/campusconnect/backend/AuthController.java:93: trailing whitespace.
+[32m+[m[41m        [m
+campusconnect-backend/src/main/java/com/campusconnect/backend/HelpRequestController.java:83: trailing whitespace.
+[32m+[m[41m        [m
+campusconnect-backend/src/main/java/com/campusconnect/backend/HelpRequestController.java:191: trailing whitespace.
+[32m+[m[41m    [m
+campusconnect-frontend/src/Dashboard.jsx:246: trailing whitespace.
+[32m+[m[41m      [m
+campusconnect-frontend/src/Dashboard.jsx:314: trailing whitespace.
+[32m+[m[41m          [m
