@@ -1,0 +1,37 @@
+﻿@startuml
+left to right direction
+actor Student
+
+rectangle CampusConnect {
+  usecase "Register" as UC1
+  usecase "Login" as UC2
+  usecase "Logout" as UC3
+  usecase "View Dashboard" as UC4
+  usecase "View Profile" as UC5
+  usecase "View My Skills" as UC6
+  usecase "Add Skill" as UC7
+  usecase "Create Help Request" as UC8
+  usecase "View Help Requests" as UC9
+  usecase "Find Matching Helpers" as UC10
+  usecase "Accept Help Request" as UC11
+  usecase "Start Help Request" as UC12
+  usecase "Resolve Help Request" as UC13
+  usecase "View Leaderboard" as UC14
+  usecase "View Help History" as UC15
+}
+Student --> UC1
+Student --> UC2
+Student --> UC3
+Student --> UC4
+Student --> UC5
+Student --> UC6
+Student --> UC7
+Student --> UC8
+Student --> UC9
+Student --> UC10
+Student --> UC11
+Student --> UC12
+Student --> UC13
+Student --> UC14
+Student --> UC15
+@enduml

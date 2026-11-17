@@ -1,0 +1,24 @@
+﻿@startuml
+actor Student
+participant "React Frontend" as UI
+participant "MatchingHelperController" as Controller
+database "SQLite Database" as DB
+
+Student -> UI : Select a help request
+UI -> Controller : GET /api/requests/{id}/matching-helpers
+Controller -> DB : Fetch request by requestId
+DB --> Controller : Request topic and description
+
+alt Request not found
+  Controller --> UI : 404 Help request not found
+  UI --> Student : Display error
+else Request found
+  Controller -> DB : Fetch other students and their skills
+  DB --> Controller : Student details and skills
+  Controller -> Controller : Match skills with topic and description
+  Controller -> Controller : Calculate score\nTopic = 3 points\nDescription = 1 point
+  Controller -> Controller : Sort helpers by score
+  Controller --> UI : Return matching helpers
+  UI --> Student : Display ranked helpers
+end
+@enduml

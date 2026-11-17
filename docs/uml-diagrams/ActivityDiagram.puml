@@ -1,0 +1,33 @@
+﻿@startuml
+start
+:Student opens CampusConnect;
+if (Already registered?) then (No)
+  :Enter name, course, roll and password;
+  :Register account;
+endif
+:Enter roll and password;
+:Login;
+if (Login successful?) then (No)
+  :Display login error;
+  stop
+else (Yes)
+  :Open Dashboard;
+endif
+:View available help requests;
+if (Need help?) then (Yes)
+  :Create help request;
+  :Request status = OPEN;
+  :Other student accepts request;
+  :Status = ASSIGNED;
+  :Assigned helper starts work;
+  :Status = IN_PROGRESS;
+  :Helper completes work;
+  :Status = RESOLVED;
+  :Update help history and leaderboard;
+else (No)
+  :Browse requests and matching helpers;
+endif
+:View skills and leaderboard;
+:Logout;
+stop
+@enduml

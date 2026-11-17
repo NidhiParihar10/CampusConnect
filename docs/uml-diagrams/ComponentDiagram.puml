@@ -1,0 +1,47 @@
+﻿@startuml
+package "CampusConnect Frontend" {
+  [React Application] as React
+  [Login / Register] as AuthUI
+  [Dashboard] as Dashboard
+  [Create Request] as CreateRequest
+  [My Skills] as MySkills
+  [Matching Helpers] as Matching
+  [Leaderboard] as Leaderboard
+}
+
+package "Spring Boot Backend" {
+  [AuthController] as Auth
+  [AuthService] as AuthService
+  [StudentController] as Student
+  [StudentSkillController] as Skills
+  [HelpRequestController] as Requests
+  [MatchingHelperController] as MatchController
+  [LeaderboardController] as BoardController
+  [Spring Security] as Security
+}
+
+database "SQLite Database" as DB
+
+React --> AuthUI
+React --> Dashboard
+Dashboard --> CreateRequest
+Dashboard --> MySkills
+Dashboard --> Matching
+Dashboard --> Leaderboard
+
+AuthUI --> Auth
+Dashboard --> Student
+CreateRequest --> Requests
+MySkills --> Skills
+Matching --> MatchController
+Leaderboard --> BoardController
+
+Auth --> AuthService
+Auth --> Security
+AuthService --> DB
+Student --> DB
+Skills --> DB
+Requests --> DB
+MatchController --> DB
+BoardController --> DB
+@enduml
