@@ -1,0 +1,9 @@
+
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://campusconnect-1-ieda.onrender.com/api/$1"
+    }
+  ]
+}
